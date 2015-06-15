@@ -70,13 +70,17 @@ function _M.new(stop_words)
 	
 	rake.stop_words = stop_words
 	
-	function rake:run(text)
+	function rake:run(text, return_intermediate)
 		if type(text) ~= 'string' then error('text must be a string') end
 		text = text:lower()
 		local sentences = text:gmatch('[^%p]+')
 		local keywords = generate_candidate_keywords(sentences, self.stop_words)
 		local word_scores = calculate_word_scores(keywords)
-		return generate_candidate_keyword_scores(keywords, word_scores)
+        local keyword_scores = generate_candidate_keyword_scores(keywords, word_scores)
+        if return_intermediate then
+            return sentences, keywords, word_scores, keyword_scores
+        end
+		return keyword_scores
 	end
 	return rake
 end
