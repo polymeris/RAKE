@@ -1,3 +1,6 @@
+-- A Lua implementation of the Rapid Automatic Keyword Extraction
+-- Released under the MIT License
+
 local _M = {}
 
 local function load_words(stop_words_path)
@@ -59,6 +62,13 @@ local function generate_candidate_keyword_scores(keywords, word_scores)
 	return scores
 end
 
+--- Create a rake object
+--  @param stop_words Set of stop words (i.e. a table with the words as keys), or
+--         path to a file from where to load them.
+--  @usage rake = require 'rake'
+--         r = rake.new('SmartStoplist.txt')
+--         result = r:run(text) -- returns a table mapping keywords to scores
+
 function _M.new(stop_words)
 	local rake = {}
 	
@@ -70,6 +80,11 @@ function _M.new(stop_words)
 	
 	rake.stop_words = stop_words
 	
+    --- Run the RAKE algorithm
+    --  @param text Text to extract keywords from
+    --  @param return_intermediate Optional, also return intermediate results:
+    --         sentences (a generator), keywords, and word scores (tables)
+    --  @return Keyword scores as a table
 	function rake:run(text, return_intermediate)
 		if type(text) ~= 'string' then error('text must be a string') end
 		text = text:lower()
