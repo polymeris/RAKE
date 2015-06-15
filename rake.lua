@@ -52,9 +52,8 @@ local function calculate_word_scores(keywords)
 end
 
 local function generate_candidate_keyword_scores(keywords, word_scores)
-	scores = {}
+	local scores = {}
 	for _, kw in ipairs(keywords) do
-		local words = {}
 		for w in kw:gmatch('[^%s%d]+') do
 			scores[kw] = (scores[kw] or 0) + word_scores[w]
 		end
@@ -68,7 +67,6 @@ end
 --  @usage rake = require 'rake'
 --         r = rake.new('SmartStoplist.txt')
 --         result = r:run(text) -- returns a table mapping keywords to scores
-
 function _M.new(stop_words)
 	local rake = {}
 	
