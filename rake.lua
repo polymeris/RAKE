@@ -54,9 +54,13 @@ end
 local function generate_candidate_keyword_scores(keywords, word_scores)
 	local scores = {}
 	for _, kw in ipairs(keywords) do
-		for w in kw:gmatch('[^%s%d]+') do
-			scores[kw] = (scores[kw] or 0) + word_scores[w]
-		end
+        if not scores[kw] then
+            local kw_score = 0
+    		for w in kw:gmatch('[^%s%d]+') do
+    			kw_score = kw_score + word_scores[w]
+    		end
+            scores[kw] = kw_score
+        end
 	end
 	return scores
 end
